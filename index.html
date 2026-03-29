@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AOKAE 自動部署 ダッシュボード</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8e8f0;--text2:#888899;--text3:#555566;--green:#00e5a0;--blue:#4d9fff;--purple:#9b6dff;--pink:#ff6b9d;--amber:#ffb347;--red:#ff4757;--mono:'DM Mono',monospace;--sans:'Noto Sans JP',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.container{max-width:1400px;margin:0 auto;padding:24px;position:relative;z-index:1;}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.5px;}
+.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-family:var(--mono);color:var(--green);background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);padding:4px 10px;border-radius:20px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.metric.green::before{background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.metric.blue::before{background:linear-gradient(90deg,transparent,var(--blue),transparent);}
+.metric.purple::before{background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+.metric.amber::before{background:linear-gradient(90deg,transparent,var(--amber),transparent);}
+.metric.pink::before{background:linear-gradient(90deg,transparent,var(--pink),transparent);}
+.metric-label{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+.metric-value{font-size:28px;font-weight:700;font-family:var(--mono);line-height:1;margin-bottom:4px;}
+.metric-sub{font-size:11px;color:var(--text2);}
+.metric.green .metric-value{color:var(--green);}
+.metric.blue .metric-value{color:var(--blue);}
+.metric.purple .metric-value{color:var(--purple);}
+.metric.amber .metric-value{color:var(--amber);}
+.metric.pink .metric-value{color:var(--pink);}
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:16px;}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
+.panel-title{font-size:12px;font-weight:500;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;}
+.panel-badge{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:10px;}
+.site-row{display:grid;grid-template-columns:24px 1fr 50px 50px 80px 70px;align-items:center;gap:8px;padding:9px 18px;border-bottom:1px solid var(--border);font-size:12px;transition:background 0.15s;}
+.site-row:hover{background:var(--bg3);}
+.site-row:last-child{border-bottom:none;}
+.site-row.header{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;background:var(--bg3);}
+.site-status{width:7px;height:7px;border-radius:50%;}
+.status-ok{background:var(--green);box-shadow:0 0 5px rgba(0,229,160,0.5);}
+.status-ng{background:var(--red);}
+.status-warn{background:var(--amber);}
+.site-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.site-count{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;}
+.site-count.good{color:var(--green);}
+.site-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-family:var(--mono);text-align:center;}
+.tag-live{background:rgba(0,229,160,0.1);color:var(--green);}
+.tag-wait{background:rgba(255,179,71,0.1);color:var(--amber);}
+.tag-ng{background:rgba(255,71,87,0.1);color:var(--red);}
+.right-col{display:flex;flex-direction:column;gap:12px;}
+.mono-list{padding:10px 16px;}
+.mono-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.mono-item:last-child{border-bottom:none;}
+.mono-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0;}
+.mono-name{flex:1;color:var(--text);}
+.mono-status{font-size:10px;padding:2px 8px;border-radius:10px;font-family:var(--mono);}
+.ms-active{background:rgba(0,229,160,0.1);color:var(--green);}
+.ms-pending{background:rgba(255,179,71,0.1);color:var(--amber);}
+.todo-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.todo-item:last-child{border-bottom:none;}
+.todo-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.dot-red{background:var(--red);}
+.dot-amber{background:var(--amber);}
+.dot-blue{background:var(--blue);}
+.todo-text{color:var(--text2);line-height:1.4;}
+.todo-when{font-size:10px;padding:1px 5px;border-radius:4px;margin-left:4px;}
+.when-now{background:rgba(255,71,87,0.15);color:var(--red);}
+.when-soon{background:rgba(255,179,71,0.1);color:var(--amber);}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.bar-label{font-size:11px;font-family:var(--mono);color:var(--text3);width:44px;flex-shrink:0;}
+.bar-track{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;}
+.bar-val{font-size:11px;font-family:var(--mono);color:var(--text2);width:64px;text-align:right;flex-shrink:0;}
+footer{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text3);font-family:var(--mono);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.metric{animation:fadeIn 0.4s ease both;}
+.metric:nth-child(1){animation-delay:0.05s}
+.metric:nth-child(2){animation-delay:0.1s}
+.metric:nth-child(3){animation-delay:0.15s}
+.metric:nth-child(4){animation-delay:0.2s}
+.metric:nth-child(5){animation-delay:0.25s}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="logo">
+    <div class="logo-mark">⚡</div>
+    <div>
+      <div class="logo-text">AOKAE 自動部署</div>
+      <div class="logo-sub">AFFILIATE AUTOMATION DASHBOARD</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div class="live-badge"><span class="live-dot"></span>LIVE</div>
+    <div style="font-size:11px;color:var(--text3);font-family:var(--mono);" id="now"></div>
+  </div>
+</header>
+
+<div class="metrics">
+  <div class="metric green"><div class="metric-label">総サイト数</div><div class="metric-value">25</div><div class="metric-sub">目標: 100サイト</div></div>
+  <div class="metric blue"><div class="metric-label">稼働中</div><div class="metric-value">20</div><div class="metric-sub">5サイト デプロイ待ち</div></div>
+  <div class="metric purple"><div class="metric-label">総記事数</div><div class="metric-value">191</div><div class="metric-sub">週800本ペースで増加中</div></div>
+  <div class="metric amber"><div class="metric-label">X投稿/日</div><div class="metric-value">5</div><div class="metric-sub">@beauty_note_j</div></div>
+  <div class="metric pink"><div class="metric-label">収益化</div><div class="metric-value">3/5</div><div class="metric-sub">Amazon・楽天・A8設定済</div></div>
+</div>
+
+<div class="main-grid">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">サイト稼働状況</span>
+      <span class="panel-badge" style="background:rgba(0,229,160,0.1);color:var(--green);">25 SITES</span>
+    </div>
+    <div class="site-row header">
+      <div></div><div>サイト名</div><div style="text-align:center">記事</div><div style="text-align:center">SM</div><div style="text-align:center">状態</div><div style="text-align:center">グループ</div>
+    </div>
+    <div id="sites"></div>
+  </div>
+  <div class="right-col">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">収益化状況</span></div>
+      <div class="mono-list">
+        <div class="mono-item"><span class="mono-icon">🛒</span><span class="mono-name">Amazon アソシエイト</span><span class="mono-status ms-active">稼働中</span></div>
+        <div class="mono-item"><span class="mono-icon">🛍</span><span class="mono-name">楽天アフィリエイト</span><span class="mono-status ms-active">稼働中</span></div>
+        <div class="mono-item"><span class="mono-icon">📺</span><span class="mono-name">Google AdSense</span><span class="mono-status ms-pending">審査中</span></div>
+        <div class="mono-item"><span class="mono-icon">💼</span><span class="mono-name">A8.net</span><span class="mono-status ms-pending">申請中</span></div>
+        <div class="mono-item"><span class="mono-icon">🔍</span><span class="mono-name">Search Console</span><span class="mono-status ms-pending">登録中</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">X 自動投稿</span><span class="panel-badge" style="background:rgba(0,229,160,0.1);color:var(--green);">稼働中</span></div>
+      <div class="mono-list">
+        <div class="mono-item"><span class="mono-icon">👤</span><span class="mono-name">@beauty_note_j</span><span class="mono-status ms-active">アクティブ</span></div>
+        <div class="mono-item"><span class="mono-icon">📅</span><span class="mono-name">1日5回 自動投稿</span><span class="mono-status ms-active">設定済</span></div>
+        <div class="mono-item"><span class="mono-icon">⚠️</span><span class="mono-name">月1,500回上限</span><span class="mono-status ms-pending">無料プラン</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">残タスク</span><span class="panel-badge" style="background:rgba(255,71,87,0.1);color:var(--red);">5件</span></div>
+      <div class="mono-list">
+        <div class="todo-item"><div class="todo-dot dot-red"></div><div class="todo-text">AdSense確認 + 韓国5サイトリビルド<span class="todo-when when-now">明日</span></div></div>
+        <div class="todo-item"><div class="todo-dot dot-amber"></div><div class="todo-text">Search Console 残り23サイト登録<span class="todo-when when-soon">今週</span></div></div>
+        <div class="todo-item"><div class="todo-dot dot-amber"></div><div class="todo-text">A8.net 追加案件申請（英語・転職）<span class="todo-when when-soon">今週</span></div></div>
+        <div class="todo-item"><div class="todo-dot dot-blue"></div><div class="todo-text">LINE通知 + 自動構築スクリプト</div></div>
+        <div class="todo-item"><div class="todo-dot dot-blue"></div><div class="todo-text">100サイト向けジャンルリスト作成</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-grid">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">収益成長予測</span></div>
+    <div class="mono-list">
+      <div class="bar-row"><span class="bar-label">今</span><div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--text3)"></div></div><span class="bar-val">¥0〜</span></div>
+      <div class="bar-row"><span class="bar-label">1ヶ月</span><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--green)"></div></div><span class="bar-val">〜¥5,000</span></div>
+      <div class="bar-row"><span class="bar-label">3ヶ月</span><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--blue)"></div></div><span class="bar-val">〜¥3万</span></div>
+      <div class="bar-row"><span class="bar-label">6ヶ月</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--purple)"></div></div><span class="bar-val">〜¥10万</span></div>
+      <div class="bar-row"><span class="bar-label">12ヶ月</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--pink)"></div></div><span class="bar-val">〜¥30万</span></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">100サイト進捗</span><span class="panel-badge" style="background:rgba(0,229,160,0.1);color:var(--green);">25 / 100</span></div>
+    <div class="mono-list">
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px;font-family:var(--mono);color:var(--text3);"><span>完成</span><span>25%</span></div>
+        <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;"><div style="height:100%;width:25%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:4px;"></div></div>
+      </div>
+      <div id="progress-grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-bottom:16px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+        <div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--green);">20</div><div style="font-size:10px;color:var(--text3);">稼働中</div></div>
+        <div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--amber);">5</div><div style="font-size:10px;color:var(--text3);">待機中</div></div>
+        <div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--text3);">75</div><div style="font-size:10px;color:var(--text3);">残り</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>AOKAE合同会社 © 2026 — 自動部署システム v1.0</span>
+  <span id="footer-time"></span>
+</footer>
+</div>
+
+<script>
+const SITES=[
+  {name:"ヘアカラーLAB",emoji:"💇",ok:true,articles:36,sitemap:38,group:"beauty"},
+  {name:"ダイエットNOW",emoji:"🥗",ok:true,articles:0,sitemap:2,group:"fitness"},
+  {name:"筋トレLAB",emoji:"💪",ok:true,articles:15,sitemap:12,group:"fitness"},
+  {name:"スキンケアNOTE",emoji:"🌿",ok:true,articles:10,sitemap:7,group:"beauty"},
+  {name:"ペットLOVE",emoji:"🐾",ok:true,articles:10,sitemap:12,group:"life"},
+  {name:"ガジェットLAB",emoji:"⚡",ok:true,articles:10,sitemap:0,group:"tech"},
+  {name:"ベビーNOTE",emoji:"👶",ok:true,articles:10,sitemap:2,group:"life"},
+  {name:"旅行LOG",emoji:"✈",ok:true,articles:10,sitemap:2,group:"life"},
+  {name:"料理NOTE",emoji:"🍳",ok:true,articles:10,sitemap:2,group:"food"},
+  {name:"ネイルLAB",emoji:"💅",ok:true,articles:10,sitemap:2,group:"beauty"},
+  {name:"ゴルフLAB",emoji:"⛳",ok:true,articles:10,sitemap:2,group:"sports"},
+  {name:"カメラLAB",emoji:"📷",ok:true,articles:10,sitemap:2,group:"tech"},
+  {name:"副業NOTE",emoji:"💰",ok:true,articles:10,sitemap:2,group:"work"},
+  {name:"英語LAB",emoji:"🗣",ok:true,articles:10,sitemap:12,group:"work"},
+  {name:"インテリアLOG",emoji:"🛋",ok:true,articles:10,sitemap:2,group:"life"},
+  {name:"ファッションNOTE",emoji:"👗",ok:true,articles:10,sitemap:12,group:"beauty"},
+  {name:"ヨガNOTE",emoji:"🧘",ok:true,articles:10,sitemap:2,group:"fitness"},
+  {name:"コーヒーNOTE",emoji:"☕",ok:true,articles:10,sitemap:12,group:"food"},
+  {name:"サウナLOG",emoji:"🔥",ok:true,articles:10,sitemap:12,group:"fitness"},
+  {name:"キャリアNOTE",emoji:"🚀",ok:true,articles:10,sitemap:2,group:"work"},
+  {name:"韓国コスメレビュー",emoji:"💄",ok:false,articles:10,sitemap:0,group:"kbeauty"},
+  {name:"韓国メイクLAB",emoji:"✨",ok:false,articles:5,sitemap:0,group:"kbeauty"},
+  {name:"K-Beautyブランド",emoji:"🌸",ok:false,articles:5,sitemap:0,group:"kbeauty"},
+  {name:"韓国スキンケアLAB",emoji:"🔬",ok:false,articles:5,sitemap:0,group:"kbeauty"},
+  {name:"韓国ドラマ美容",emoji:"🎬",ok:false,articles:5,sitemap:0,group:"kbeauty"},
+];
+const gc={beauty:'#ff6b9d',fitness:'#00e5a0',life:'#4d9fff',tech:'#9b6dff',work:'#ffb347',food:'#ff9f43',sports:'#26de81',kbeauty:'#fd79a8'};
+const sl=document.getElementById('sites');
+SITES.forEach(s=>{
+  const r=document.createElement('div');
+  r.className='site-row';
+  const st=s.ok?'status-ok':'status-ng';
+  const tg=s.ok?(s.articles>0?'tag-live':'tag-wait'):'tag-ng';
+  const tt=s.ok?(s.articles>0?'LIVE':'記事待ち'):'デプロイ待ち';
+  const c=gc[s.group]||'#888';
+  r.innerHTML=`<span class="site-status ${st}"></span><span class="site-name">${s.emoji} ${s.name}</span><span class="site-count ${s.articles>0?'good':''}">${s.articles}</span><span class="site-count">${s.sitemap}</span><span class="site-tag ${tg}">${tt}</span><span class="site-tag" style="background:${c}18;color:${c}">${s.group}</span>`;
+  sl.appendChild(r);
+});
+const pg=document.getElementById('progress-grid');
+for(let i=0;i<100;i++){
+  const d=document.createElement('div');
+  const c=i<20?'var(--green)':i<25?'var(--amber)':'var(--bg3)';
+  d.style.cssText=`height:14px;border-radius:2px;background:${c};opacity:${i<25?1:0.3}`;
+  pg.appendChild(d);
+}
+function tick(){
+  const n=new Date();
+  const f=n.toLocaleString('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('now').textContent=f+' JST';
+  document.getElementById('footer-time').textContent='最終更新: '+f;
+}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
