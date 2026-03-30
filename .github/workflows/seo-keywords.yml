@@ -1,0 +1,183 @@
+name: Weekly SEO Keyword Update
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-keywords:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Update keywords with Google Suggest + Claude AI
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          node << 'JSEOF'
+          const https = require('https');
+          const http = require('http');
+          const fs = require('fs');
+
+          const SITES = {"haircolor-lab": ["ヘアカラー", "白髪染め", "セルフカラー"], "diet-now-jp": ["ダイエット", "痩せる方法", "食事制限"], "fitness-lab-jp": ["筋トレ", "プロテイン", "ダイエット運動"], "skincare-note-jp": ["スキンケア", "化粧水", "美容"], "pet-love-jp": ["ペット", "犬 飼い方", "猫 グッズ"], "gadget-lab-jp": ["ガジェット", "スマホ おすすめ", "イヤホン"], "baby-note-jp": ["育児", "赤ちゃん グッズ", "離乳食"], "travel-log-jp": ["旅行", "国内旅行", "ホテル おすすめ"], "cooking-note-jp": ["料理 簡単", "レシピ", "時短料理"], "nail-lab-jp": ["ネイル セルフ", "ジェルネイル", "ネイルデザイン"], "golf-lab-jp": ["ゴルフ 初心者", "ゴルフクラブ", "スコアアップ"], "camera-lab-jp": ["カメラ おすすめ", "写真 撮り方", "ミラーレス"], "side-job-jp": ["副業", "在宅ワーク", "稼ぐ方法"], "english-lab-jp": ["英語 勉強法", "TOEIC 対策", "英会話"], "interior-log-jp": ["インテリア", "部屋 おしゃれ", "家具 おすすめ"], "fashion-note-jp": ["ファッション", "コーデ", "トレンド 2026"], "yoga-note-jp": ["ヨガ 初心者", "瞑想", "ストレッチ"], "coffee-note-jp": ["コーヒー", "カフェ おすすめ", "コーヒー豆"], "sauna-log-jp": ["サウナ 効果", "ととのう", "サウナ おすすめ"], "career-note-jp": ["転職", "キャリアアップ", "副業 おすすめ"], "kcos-review-jp": ["韓国コスメ", "Kビューティー", "韓国スキンケア"], "kmake-lab-jp": ["韓国メイク", "オルチャンメイク", "韓国アイドル メイク"], "kbeauty-brand-jp": ["韓国コスメ ブランド", "COSRX", "innisfree"], "kskin-lab-jp": ["韓国スキンケア", "ナイアシンアミド", "セラミド"], "kdrama-beauty-jp": ["韓国ドラマ 美容", "韓国女優 スキンケア", "Kビューティー"]};
+
+          function fetchUrl(url, opts={}) {
+            return new Promise((resolve, reject) => {
+              const client = url.startsWith('https') ? https : http;
+              const req = client.request(url, opts, res => {
+                let d = '';
+                res.on('data', c => d += c);
+                res.on('end', () => resolve({status: res.statusCode, body: d}));
+              });
+              req.on('error', reject);
+              if (opts.body) req.write(opts.body);
+              req.end();
+            });
+          }
+
+          async function getGoogleSuggest(keyword) {
+            try {
+              const encoded = encodeURIComponent(keyword);
+              const url = `http://suggestqueries.google.com/complete/search?client=firefox&hl=ja&q=${encoded}`;
+              const r = await fetchUrl(url);
+              const data = JSON.parse(r.body);
+              return data[1] || [];
+            } catch(e) {
+              return [];
+            }
+          }
+
+          async function selectBestKeywords(repo, baseKeywords, suggestions) {
+            const allKeywords = [...new Set([...baseKeywords, ...suggestions])].slice(0, 30);
+            const prompt = `あなたはSEO専門家です。以下のキーワードリストから、「${repo}」サイトにとって最も効果的な記事キーワードを5つ選んでください。
+
+選定基準：
+- 検索ボリュームが高そう
+- 競合が比較的少なそう
+- アフィリエイト商品と関連性が高い
+- 2026年のトレンドに合っている
+
+キーワードリスト：
+${allKeywords.join('\n')}
+
+JSON形式で回答してください：
+{"keywords": ["キーワード1", "キーワード2", "キーワード3", "キーワード4", "キーワード5"], "reason": "選定理由"}`;
+
+            try {
+              const body = JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 500,
+                messages: [{role: 'user', content: prompt}]
+              });
+              const r = await fetchUrl('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': process.env.ANTHROPIC_API_KEY,
+                  'anthropic-version': '2023-06-01',
+                  'Content-Length': Buffer.byteLength(body)
+                },
+                body
+              });
+              const d = JSON.parse(r.body);
+              const text = d.content[0].text.replace(/```json|```/g, '').trim();
+              return JSON.parse(text);
+            } catch(e) {
+              return {keywords: baseKeywords.slice(0, 5), reason: 'デフォルト'};
+            }
+          }
+
+          async function main() {
+            const results = [];
+            const repos = Object.keys(SITES);
+
+            for (const repo of repos) {
+              console.log(`Processing: ${repo}`);
+              const baseKeywords = SITES[repo];
+              const suggestions = [];
+
+              for (const kw of baseKeywords.slice(0, 2)) {
+                const s = await getGoogleSuggest(kw);
+                suggestions.push(...s.slice(0, 5));
+                await new Promise(r => setTimeout(r, 500));
+              }
+
+              const selected = await selectBestKeywords(repo, baseKeywords, suggestions);
+              results.push({repo, ...selected});
+
+              // keywords.jsonを更新
+              const kwData = {
+                updated: new Date().toISOString().split('T')[0],
+                keywords: selected.keywords,
+                reason: selected.reason
+              };
+
+              // GitHub APIでファイル更新
+              const encoded = Buffer.from(JSON.stringify(kwData, null, 2)).toString('base64');
+              const ghUrl = `https://api.github.com/repos/okuwabara07-gif/${repo}/contents/scripts/keywords.json`;
+
+              // 既存ファイルのSHAを取得
+              let sha = '';
+              try {
+                const getR = await fetchUrl(ghUrl, {
+                  headers: {'Authorization': `Bearer ${process.env.GH_TOKEN}`, 'User-Agent': 'aokae-bot'}
+                });
+                if (getR.status === 200) {
+                  sha = JSON.parse(getR.body).sha;
+                }
+              } catch(e) {}
+
+              const putBody = JSON.stringify({
+                message: `seo: update keywords ${new Date().toISOString().split('T')[0]}`,
+                content: encoded,
+                ...(sha ? {sha} : {})
+              });
+
+              await fetchUrl(ghUrl, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': `Bearer ${process.env.GH_TOKEN}`,
+                  'Content-Type': 'application/json',
+                  'User-Agent': 'aokae-bot',
+                  'Content-Length': Buffer.byteLength(putBody)
+                },
+                body: putBody
+              });
+
+              console.log(`  ✅ ${repo}: ${selected.keywords.join(', ')}`);
+              await new Promise(r => setTimeout(r, 1000));
+            }
+
+            // Discordに週次レポート送信
+            const report = results.map(r =>
+              `**${r.repo}**: ${r.keywords.slice(0,3).join(' / ')}`
+            ).join('\n');
+
+            const embed = {
+              title: '🔍 週次SEOキーワード更新レポート',
+              color: 0x9b6dff,
+              fields: [
+                {name: '📊 更新サイト数', value: `${results.length}サイト`, inline: true},
+                {name: '📅 更新日', value: new Date().toLocaleDateString('ja-JP'), inline: true},
+                {name: '🎯 今週の注目キーワード', value: report.slice(0, 1000)},
+              ],
+              footer: {text: 'Google Suggest + Claude AI で自動最適化'}
+            };
+
+            const webhookBody = JSON.stringify({embeds: [embed]});
+            await fetchUrl(process.env.DISCORD_WEBHOOK, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(webhookBody)},
+              body: webhookBody
+            });
+
+            console.log('\n✅ 全サイトキーワード更新完了！Discordに送信しました');
+          }
+
+          main().catch(console.error);
+          JSEOF
