@@ -1,0 +1,492 @@
+[
+  {
+    "repo": "makeup-lab-jp",
+    "name": "メイクLAB",
+    "emoji": "💋",
+    "desc": "メイクのやり方・コスメレビュー・トレンドを発信",
+    "tags": "#メイク #コスメ #美容 #メイク初心者"
+  },
+  {
+    "repo": "hair-care-jp",
+    "name": "ヘアケアNOTE",
+    "emoji": "💆",
+    "desc": "ヘアケア・シャンプー・トリートメントの最新情報",
+    "tags": "#ヘアケア #シャンプー #美髪 #ヘアトリートメント"
+  },
+  {
+    "repo": "perfume-lab-jp",
+    "name": "香水LAB",
+    "emoji": "🌹",
+    "desc": "香水・フレグランスのレビューとおすすめを発信",
+    "tags": "#香水 #フレグランス #いい香り #パフューム"
+  },
+  {
+    "repo": "diet-recipe-jp",
+    "name": "ダイエットレシピ",
+    "emoji": "🥗",
+    "desc": "ダイエット中でも満足できるレシピを毎日発信",
+    "tags": "#ダイエットレシピ #低カロリー #ヘルシー #食事制限"
+  },
+  {
+    "repo": "running-lab-jp",
+    "name": "ランニングLAB",
+    "emoji": "🏃",
+    "desc": "ランニング・マラソンの上達法とギアを紹介",
+    "tags": "#ランニング #マラソン #ジョギング #健康"
+  },
+  {
+    "repo": "swimming-note-jp",
+    "name": "水泳NOTE",
+    "emoji": "🏊",
+    "desc": "水泳・スイミングの上達法とおすすめ用品を紹介",
+    "tags": "#水泳 #スイミング #プール #健康"
+  },
+  {
+    "repo": "cycling-log-jp",
+    "name": "サイクリングLOG",
+    "emoji": "🚴",
+    "desc": "自転車・サイクリングのルートとギアを紹介",
+    "tags": "#サイクリング #自転車 #ロードバイク #アウトドア"
+  },
+  {
+    "repo": "hiking-note-jp",
+    "name": "登山NOTE",
+    "emoji": "🏔️",
+    "desc": "登山・ハイキングのルートとおすすめ装備を紹介",
+    "tags": "#登山 #ハイキング #アウトドア #山"
+  },
+  {
+    "repo": "fishing-lab-jp",
+    "name": "釣りLAB",
+    "emoji": "🎣",
+    "desc": "釣りのテクニックとおすすめタックルを紹介",
+    "tags": "#釣り #フィッシング #アウトドア #釣り好き"
+  },
+  {
+    "repo": "camping-log-jp",
+    "name": "キャンプLOG",
+    "emoji": "⛺",
+    "desc": "キャンプのノウハウとおすすめギアを紹介",
+    "tags": "#キャンプ #アウトドア #焚き火 #ソロキャンプ"
+  },
+  {
+    "repo": "wine-note-jp",
+    "name": "ワインNOTE",
+    "emoji": "🍷",
+    "desc": "ワインの選び方・産地・ペアリングを詳しく解説",
+    "tags": "#ワイン #ワイン好き #お酒 #グルメ"
+  },
+  {
+    "repo": "beer-lab-jp",
+    "name": "クラフトビールLAB",
+    "emoji": "🍺",
+    "desc": "クラフトビール・地ビールのレビューと醸造所情報",
+    "tags": "#クラフトビール #地ビール #ビール #お酒"
+  },
+  {
+    "repo": "whisky-log-jp",
+    "name": "ウイスキーLOG",
+    "emoji": "🥃",
+    "desc": "ウイスキーの種類・テイスティング・おすすめを紹介",
+    "tags": "#ウイスキー #スコッチ #バーボン #お酒"
+  },
+  {
+    "repo": "bread-note-jp",
+    "name": "パンNOTE",
+    "emoji": "🍞",
+    "desc": "パン作り・ベーカリー情報・おすすめパン屋を紹介",
+    "tags": "#パン #パン作り #ベーカリー #手作りパン"
+  },
+  {
+    "repo": "sweets-lab-jp",
+    "name": "スイーツLAB",
+    "emoji": "🍰",
+    "desc": "スイーツ・お菓子作りのレシピとお店情報を発信",
+    "tags": "#スイーツ #お菓子 #ケーキ #お菓子作り"
+  },
+  {
+    "repo": "ramen-note-jp",
+    "name": "ラーメンNOTE",
+    "emoji": "🍜",
+    "desc": "ラーメン店レビュー・ランキング・インスタント比較",
+    "tags": "#ラーメン #ラーメン好き #グルメ #食べ歩き"
+  },
+  {
+    "repo": "sushi-log-jp",
+    "name": "寿司LOG",
+    "emoji": "🍣",
+    "desc": "寿司店レビュー・ネタ解説・おすすめ店を紹介",
+    "tags": "#寿司 #お寿司 #グルメ #和食"
+  },
+  {
+    "repo": "investment-note-jp",
+    "name": "投資NOTE",
+    "emoji": "📈",
+    "desc": "株・投資信託・NISAなど投資の基礎から実践まで解説",
+    "tags": "#投資 #株 #NISA #資産運用"
+  },
+  {
+    "repo": "fx-lab-jp",
+    "name": "FXLAB",
+    "emoji": "💹",
+    "desc": "FX・外国為替の基礎知識とトレード方法を解説",
+    "tags": "#FX #外国為替 #トレード #投資"
+  },
+  {
+    "repo": "realestate-jp",
+    "name": "不動産NOTE",
+    "emoji": "🏠",
+    "desc": "不動産投資・マンション購入・住宅ローンを解説",
+    "tags": "#不動産 #不動産投資 #マンション #住宅購入"
+  },
+  {
+    "repo": "tax-note-jp",
+    "name": "節税NOTE",
+    "emoji": "💴",
+    "desc": "確定申告・節税・税金対策をわかりやすく解説",
+    "tags": "#節税 #確定申告 #税金 #副業"
+  },
+  {
+    "repo": "insurance-lab-jp",
+    "name": "保険LAB",
+    "emoji": "🛡️",
+    "desc": "生命保険・医療保険の選び方を徹底比較",
+    "tags": "#保険 #生命保険 #医療保険 #節約"
+  },
+  {
+    "repo": "programming-jp",
+    "name": "プログラミングNOTE",
+    "emoji": "💻",
+    "desc": "プログラミング学習・おすすめ言語・転職情報を発信",
+    "tags": "#プログラミング #エンジニア #Python #Web開発"
+  },
+  {
+    "repo": "ai-tool-jp",
+    "name": "AIツールLAB",
+    "emoji": "🤖",
+    "desc": "ChatGPT・Claude・AI画像生成など最新AIツールを紹介",
+    "tags": "#AI #ChatGPT #Claude #AIツール"
+  },
+  {
+    "repo": "youtube-lab-jp",
+    "name": "YouTube攻略LAB",
+    "emoji": "📹",
+    "desc": "YouTube運営・動画編集・収益化のノウハウを発信",
+    "tags": "#YouTube #YouTuber #動画編集 #副業"
+  },
+  {
+    "repo": "instagram-note-jp",
+    "name": "Instagram攻略",
+    "emoji": "📸",
+    "desc": "Instagram運用・フォロワー獲得・収益化を解説",
+    "tags": "#Instagram #インスタ #SNS運用 #副業"
+  },
+  {
+    "repo": "tiktok-lab-jp",
+    "name": "TikTok攻略LAB",
+    "emoji": "🎵",
+    "desc": "TikTok運用・バズる動画の作り方・収益化を解説",
+    "tags": "#TikTok #ティックトック #SNS運用 #動画"
+  },
+  {
+    "repo": "diet-supplement-jp",
+    "name": "サプリメントNOTE",
+    "emoji": "💊",
+    "desc": "ダイエット・美容・健康サプリの効果と選び方を解説",
+    "tags": "#サプリ #サプリメント #ダイエット #健康"
+  },
+  {
+    "repo": "meditation-jp",
+    "name": "瞑想NOTE",
+    "emoji": "🧘",
+    "desc": "瞑想・マインドフルネスの効果と実践方法を紹介",
+    "tags": "#瞑想 #マインドフルネス #メンタル #ストレス解消"
+  },
+  {
+    "repo": "sleep-lab-jp",
+    "name": "睡眠LAB",
+    "emoji": "😴",
+    "desc": "睡眠の質を上げる方法・おすすめ寝具を紹介",
+    "tags": "#睡眠 #快眠 #寝具 #健康"
+  },
+  {
+    "repo": "stretch-note-jp",
+    "name": "ストレッチNOTE",
+    "emoji": "🤸",
+    "desc": "ストレッチ・柔軟体操の効果と正しいやり方を解説",
+    "tags": "#ストレッチ #柔軟 #健康 #肩こり"
+  },
+  {
+    "repo": "pilates-lab-jp",
+    "name": "ピラティスLAB",
+    "emoji": "🧘",
+    "desc": "ピラティスの効果・やり方・おすすめ動画を紹介",
+    "tags": "#ピラティス #体幹 #ダイエット #美姿勢"
+  },
+  {
+    "repo": "detox-note-jp",
+    "name": "デトックスNOTE",
+    "emoji": "🌿",
+    "desc": "デトックス・腸活・体内環境改善の方法を発信",
+    "tags": "#デトックス #腸活 #ダイエット #健康"
+  },
+  {
+    "repo": "acne-lab-jp",
+    "name": "ニキビ対策LAB",
+    "emoji": "✨",
+    "desc": "ニキビ・肌荒れの原因と対策・おすすめ化粧品を紹介",
+    "tags": "#ニキビ #肌荒れ #スキンケア #美肌"
+  },
+  {
+    "repo": "aging-care-jp",
+    "name": "エイジングケアNOTE",
+    "emoji": "🌸",
+    "desc": "シワ・たるみ・シミ対策のスキンケア情報を発信",
+    "tags": "#エイジングケア #アンチエイジング #美肌 #スキンケア"
+  },
+  {
+    "repo": "mens-beauty-jp",
+    "name": "メンズ美容NOTE",
+    "emoji": "💈",
+    "desc": "メンズスキンケア・美容・ヘアスタイルを発信",
+    "tags": "#メンズ美容 #メンズスキンケア #男性美容 #メンズコスメ"
+  },
+  {
+    "repo": "body-care-jp",
+    "name": "ボディケアLAB",
+    "emoji": "🛁",
+    "desc": "全身のボディケア・美白・保湿の方法を紹介",
+    "tags": "#ボディケア #美白 #保湿 #スキンケア"
+  },
+  {
+    "repo": "diet-drink-jp",
+    "name": "ダイエットドリンク",
+    "emoji": "🥤",
+    "desc": "ダイエット・美容に効くドリンク・スムージーを紹介",
+    "tags": "#ダイエットドリンク #スムージー #美容ドリンク #健康"
+  },
+  {
+    "repo": "korean-food-jp",
+    "name": "韓国料理NOTE",
+    "emoji": "🍲",
+    "desc": "韓国料理のレシピ・食材・お店情報を発信",
+    "tags": "#韓国料理 #韓国グルメ #チゲ #キムチ"
+  },
+  {
+    "repo": "chinese-food-jp",
+    "name": "中華料理NOTE",
+    "emoji": "🥢",
+    "desc": "中華料理のレシピ・食材・おすすめ店を紹介",
+    "tags": "#中華料理 #中国料理 #グルメ #レシピ"
+  },
+  {
+    "repo": "italian-food-jp",
+    "name": "イタリアン料理",
+    "emoji": "🍝",
+    "desc": "パスタ・ピザ・イタリア料理のレシピを発信",
+    "tags": "#イタリアン #パスタ #ピザ #グルメ"
+  },
+  {
+    "repo": "vegetarian-jp",
+    "name": "ベジタリアンNOTE",
+    "emoji": "🥦",
+    "desc": "ベジタリアン・ビーガン料理のレシピと栄養を解説",
+    "tags": "#ベジタリアン #ビーガン #植物性 #ヘルシー"
+  },
+  {
+    "repo": "dog-training-jp",
+    "name": "犬のしつけNOTE",
+    "emoji": "🐕",
+    "desc": "犬のしつけ・トレーニング・病気予防を詳しく解説",
+    "tags": "#犬 #ドッグ #しつけ #ペット"
+  },
+  {
+    "repo": "cat-care-jp",
+    "name": "猫のケアNOTE",
+    "emoji": "🐈",
+    "desc": "猫の健康管理・グッズ・おすすめフードを紹介",
+    "tags": "#猫 #ねこ #猫グッズ #ペット"
+  },
+  {
+    "repo": "aquarium-jp",
+    "name": "熱帯魚NOTE",
+    "emoji": "🐠",
+    "desc": "熱帯魚・アクアリウムの飼い方と水槽レイアウトを紹介",
+    "tags": "#熱帯魚 #アクアリウム #水槽 #ペット"
+  },
+  {
+    "repo": "houseplant-jp",
+    "name": "観葉植物NOTE",
+    "emoji": "🌱",
+    "desc": "観葉植物の育て方・おすすめ品種・インテリアを発信",
+    "tags": "#観葉植物 #植物 #グリーンインテリア #インテリア"
+  },
+  {
+    "repo": "diy-lab-jp",
+    "name": "DIYLAB",
+    "emoji": "🔨",
+    "desc": "DIY・リノベーション・手作り家具のノウハウを発信",
+    "tags": "#DIY #リノベーション #手作り #インテリア"
+  },
+  {
+    "repo": "cleaning-note-jp",
+    "name": "掃除・整理NOTE",
+    "emoji": "🧹",
+    "desc": "掃除・片付け・収納の効率的なやり方を紹介",
+    "tags": "#掃除 #片付け #収納 #断捨離"
+  },
+  {
+    "repo": "minimalist-jp",
+    "name": "ミニマリストNOTE",
+    "emoji": "✨",
+    "desc": "ミニマリスト・シンプルライフの実践方法を発信",
+    "tags": "#ミニマリスト #シンプルライフ #断捨離 #暮らし"
+  },
+  {
+    "repo": "furniture-lab-jp",
+    "name": "家具・雑貨LAB",
+    "emoji": "🛋️",
+    "desc": "おしゃれな家具・雑貨のレビューとインテリア提案",
+    "tags": "#家具 #雑貨 #インテリア #おしゃれ"
+  },
+  {
+    "repo": "kids-toy-jp",
+    "name": "知育おもちゃNOTE",
+    "emoji": "🧸",
+    "desc": "知育玩具・おもちゃのレビューと選び方を発信",
+    "tags": "#知育玩具 #おもちゃ #育児 #子育て"
+  },
+  {
+    "repo": "maternity-jp",
+    "name": "マタニティNOTE",
+    "emoji": "🤰",
+    "desc": "妊娠・出産・マタニティグッズの情報を発信",
+    "tags": "#マタニティ #妊娠 #出産 #ママ"
+  },
+  {
+    "repo": "kindergarten-jp",
+    "name": "幼稚園・保育園NOTE",
+    "emoji": "🎒",
+    "desc": "幼稚園・保育園の選び方・入園準備情報を発信",
+    "tags": "#幼稚園 #保育園 #育児 #子育て"
+  },
+  {
+    "repo": "study-lab-jp",
+    "name": "勉強法LAB",
+    "emoji": "📚",
+    "desc": "効率的な勉強法・参考書・学習ツールを紹介",
+    "tags": "#勉強法 #学習 #資格 #受験"
+  },
+  {
+    "repo": "music-note-jp",
+    "name": "音楽NOTE",
+    "emoji": "🎵",
+    "desc": "音楽・楽器・音楽理論の入門から上達法まで発信",
+    "tags": "#音楽 #ギター #ピアノ #楽器"
+  },
+  {
+    "repo": "guitar-lab-jp",
+    "name": "ギターLAB",
+    "emoji": "🎸",
+    "desc": "ギターの弾き方・おすすめ機材・練習法を発信",
+    "tags": "#ギター #アコギ #エレキ #音楽"
+  },
+  {
+    "repo": "art-note-jp",
+    "name": "アートNOTE",
+    "emoji": "🎨",
+    "desc": "絵の描き方・デジタルアート・おすすめ画材を紹介",
+    "tags": "#アート #絵 #イラスト #デジタルアート"
+  },
+  {
+    "repo": "movie-log-jp",
+    "name": "映画LOG",
+    "emoji": "🎬",
+    "desc": "映画レビュー・ランキング・おすすめ作品を発信",
+    "tags": "#映画 #映画好き #洋画 #邦画"
+  },
+  {
+    "repo": "anime-note-jp",
+    "name": "アニメNOTE",
+    "emoji": "📺",
+    "desc": "アニメレビュー・おすすめ作品・聖地巡礼情報を発信",
+    "tags": "#アニメ #アニメ好き #おすすめアニメ #漫画"
+  },
+  {
+    "repo": "game-lab-jp",
+    "name": "ゲームLAB",
+    "emoji": "🎮",
+    "desc": "ゲームレビュー・攻略情報・おすすめゲームを発信",
+    "tags": "#ゲーム #ゲーマー #PS5 #Switch"
+  },
+  {
+    "repo": "book-note-jp",
+    "name": "読書NOTE",
+    "emoji": "📖",
+    "desc": "本のレビュー・おすすめ書籍・読書術を発信",
+    "tags": "#読書 #本 #書評 #おすすめ本"
+  },
+  {
+    "repo": "podcast-lab-jp",
+    "name": "ポッドキャストLAB",
+    "emoji": "🎙️",
+    "desc": "おすすめポッドキャスト・配信方法・機材を紹介",
+    "tags": "#ポッドキャスト #Podcast #音声配信 #ラジオ"
+  },
+  {
+    "repo": "travel-hawaii-jp",
+    "name": "ハワイ旅行NOTE",
+    "emoji": "🌺",
+    "desc": "ハワイ旅行のホテル・グルメ・観光スポットを紹介",
+    "tags": "#ハワイ #ハワイ旅行 #旅行 #海外旅行"
+  },
+  {
+    "repo": "travel-europe-jp",
+    "name": "ヨーロッパ旅行",
+    "emoji": "🗼",
+    "desc": "ヨーロッパ旅行のモデルコース・ホテル・観光情報",
+    "tags": "#ヨーロッパ #海外旅行 #パリ #旅行"
+  },
+  {
+    "repo": "travel-korea-jp",
+    "name": "韓国旅行NOTE",
+    "emoji": "🇰🇷",
+    "desc": "韓国旅行のグルメ・ショッピング・観光スポットを紹介",
+    "tags": "#韓国旅行 #ソウル #釜山 #旅行"
+  },
+  {
+    "repo": "wedding-note-jp",
+    "name": "結婚式NOTE",
+    "emoji": "💍",
+    "desc": "結婚式の準備・費用・おすすめ式場情報を発信",
+    "tags": "#結婚式 #ウェディング #婚活 #結婚"
+  },
+  {
+    "repo": "diet-gym-jp",
+    "name": "ジム選びNOTE",
+    "emoji": "🏋️",
+    "desc": "ジム・フィットネスクラブの選び方と比較情報",
+    "tags": "#ジム #フィットネス #筋トレ #ダイエット"
+  },
+  {
+    "repo": "kpop-note-jp",
+    "name": "K-POP NOTE",
+    "emoji": "🎤",
+    "desc": "K-POP・韓国アイドルの最新情報とファッションを発信",
+    "tags": "#KPOP #韓国アイドル #BTS #NewJeans"
+  },
+  {
+    "repo": "kdiet-note-jp",
+    "name": "韓国ダイエットNOTE",
+    "emoji": "🥗",
+    "desc": "韓国式ダイエット・韓国人気痩せ方法を詳しく紹介",
+    "tags": "#韓国ダイエット #ダイエット #痩せる #韓国"
+  },
+  {
+    "repo": "kfood-note-jp",
+    "name": "韓国フードNOTE",
+    "emoji": "🍱",
+    "desc": "韓国フード・韓国料理・韓国グルメの最新情報を発信",
+    "tags": "#韓国フード #韓国料理 #韓国グルメ #グルメ"
+  }
+]
