@@ -173,7 +173,7 @@ footer{padding-top:14px;border-top:1px solid var(--border);display:flex;justify-
 <!-- Overview -->
 <div class="tab-content active" id="tab-overview">
   <div class="metrics">
-    <div class="metric green"><div class="metric-label">総サイト数</div><div class="metric-value">25</div><div class="metric-sub">目標: 100</div></div>
+    <div class="metric green"><div class="metric-label">総サイト数</div><div class="metric-value">26</div><div class="metric-sub">目標: 100</div></div>
     <div class="metric blue"><div class="metric-label">稼働中</div><div class="metric-value">25</div><div class="metric-sub">全サイト稼働中</div></div>
     <div class="metric purple"><div class="metric-label">総記事数</div><div class="metric-value">191</div><div class="metric-sub">週800本ペース</div></div>
     <div class="metric amber"><div class="metric-label">X投稿/日</div><div class="metric-value">5</div><div class="metric-sub">@beauty_note_j</div></div>
@@ -198,6 +198,7 @@ footer{padding-top:14px;border-top:1px solid var(--border);display:flex;justify-
           <div class="mono-item"><span style="font-size:14px;">📺</span><span class="mono-name">Google AdSense</span><span class="ms ms-wait">審査中</span></div>
           <div class="mono-item"><span style="font-size:14px;">💼</span><span class="mono-name">A8.net</span><span class="ms ms-wait">申請中</span></div>
           <div class="mono-item"><span style="font-size:14px;">💬</span><span class="mono-name">Discord通知</span><span class="ms ms-ok">18:00毎日</span></div>
+          <div class="mono-item"><span style="font-size:14px;">💎</span><span class="mono-name">K-Beautyポータル</span><span class="ms ms-ok">Quiet Luxury</span></div>
         </div>
       </div>
       <div class="panel">
@@ -209,7 +210,7 @@ footer{padding-top:14px;border-top:1px solid var(--border);display:flex;justify-
         </div>
       </div>
       <div class="panel">
-        <div class="panel-header"><span class="panel-title">100サイト進捗</span><span class="panel-badge" style="background:rgba(0,229,160,0.1);color:var(--green);">25/100</span></div>
+        <div class="panel-header"><span class="panel-title">100サイト進捗</span><span class="panel-badge" style="background:rgba(0,229,160,0.1);color:var(--green);">26/100</span></div>
         <div style="padding:14px;">
           <div style="height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:10px;"><div style="height:100%;width:25%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:3px;"></div></div>
           <div class="progress-grid" id="pdots"></div>
@@ -361,8 +362,14 @@ const SITES=[
   {name:"韓国ドラマ美容",emoji:"🎬",repo:"kdrama-beauty-jp",ok:true,articles:5,sitemap:0,group:"kbeauty"},
 ];
 
-const gc={beauty:'#ff6b9d',fitness:'#00e5a0',life:'#4d9fff',tech:'#9b6dff',work:'#ffb347',food:'#ff9f43',sports:'#26de81',kbeauty:'#fd79a8'};
+const gc={beauty:'#ff6b9d',fitness:'#00e5a0',life:'#4d9fff',tech:'#9b6dff',work:'#ffb347',food:'#ff9f43',sports:'#26de81',kbeauty:'#fd79a8',portal:'#C9924A'};
 
+
+const PORTAL_INFO = {
+  url: "https://beauty-portal-jp.vercel.app",
+  style: "Quiet Luxury",
+  features: ["ランキング", "口コミ", "AIカラー診断", "アフィリエイト"],
+};
 
 const LATEST_ARTICLES = [{"repo": "haircolor-lab", "name": "ヘアカラーLAB", "file": "黒髪-明るくする-市販-1774741676293.mdx"}, {"repo": "diet-now-jp", "name": "ダイエットNOW", "file": "頭皮-効果-やり方-1774788118975.mdx"}, {"repo": "fitness-lab-jp", "name": "筋トレLAB", "file": "腹筋-割る-方法-期間-1774778154946.mdx"}, {"repo": "skincare-note-jp", "name": "スキンケアNOTE", "file": "美白-おすすめ-化粧品-1774778149853.mdx"}, {"repo": "pet-love-jp", "name": "ペットLOVE", "file": "猫-爪とぎ-おすすめ-1774766632659.mdx"}, {"repo": "gadget-lab-jp", "name": "ガジェットLAB", "file": "モバイルバッテリー-大容量-おすすめ-1774796700082.mdx"}, {"repo": "baby-note-jp", "name": "ベビーNOTE", "file": "離乳食-始め方-時期-1774778247489.mdx"}, {"repo": "travel-log-jp", "name": "旅行LOG", "file": "海外旅行-初心者-準備-1774766637753.mdx"}, {"repo": "cooking-note-jp", "name": "料理NOTE", "file": "電気圧力鍋-おすすめ-レシピ-1774766638393.mdx"}, {"repo": "nail-lab-jp", "name": "ネイルLAB", "file": "マニキュア-長持ち-コツ-1774766645013.mdx"}, {"repo": "golf-lab-jp", "name": "ゴルフLAB", "file": "パター-おすすめ-選び方-1774778147846.mdx"}, {"repo": "camera-lab-jp", "name": "カメラLAB", "file": "動画撮影-カメラ-おすすめ-1774796698818.mdx"}, {"repo": "side-job-jp", "name": "副業NOTE", "file": "副業-在宅-稼げる-1774778247484.mdx"}, {"repo": "english-lab-jp", "name": "英語LAB", "file": "英語日記-書き方-例文-1774766651470.mdx"}, {"repo": "interior-log-jp", "name": "インテリアLOG", "file": "照明-おしゃれ-リビング-1774793069528.mdx"}, {"repo": "fashion-note-jp", "name": "ファッションNOTE", "file": "白シャツ-コーデ-着こなし-1774793072832.mdx"}, {"repo": "yoga-note-jp", "name": "ヨガNOTE", "file": "骨盤-矯正-ヨガ-ポーズ-1774778153051.mdx"}, {"repo": "coffee-note-jp", "name": "コーヒーNOTE", "file": "電動コーヒーミル-おすすめ-1774793043594.mdx"}, {"repo": "sauna-log-jp", "name": "サウナLOG", "file": "水風呂-苦手-克服-方法-1774766666962.mdx"}, {"repo": "career-note-jp", "name": "キャリアNOTE", "file": "面接-自己PR-例文-1774796699930.mdx"}, {"repo": "kcos-review-jp", "name": "韓国コスメレビュー", "file": "韓国日焼け止め-おすすめ-1774825455712.mdx"}, {"repo": "kmake-lab-jp", "name": "韓国メイクLAB", "file": "韓国眉毛-書き方-コツ-1774780443447.mdx"}, {"repo": "kbeauty-brand-jp", "name": "K-Beautyブランド", "file": "romnd-リップ-おすすめ-1774825550858.mdx"}, {"repo": "kskin-lab-jp", "name": "韓国スキンケアLAB", "file": "ペプチド-韓国スキンケア-1774825443635.mdx"}, {"repo": "kdrama-beauty-jp", "name": "韓国ドラマ美容", "file": "韓国女優-スキンケア-秘訣-1774780451847.mdx"}];
 
@@ -401,7 +408,7 @@ SITES.forEach(s=>{
 
 // Progress dots
 const pd=document.getElementById('pdots');
-for(let i=0;i<100;i++){const d=document.createElement('div');d.className='pdot';d.style.cssText=`background:${i<25?'var(--green)':'var(--bg3)'};opacity:${i<25?1:0.3};`;pd.appendChild(d);}
+for(let i=0;i<100;i++){const d=document.createElement('div');d.className='pdot';d.style.cssText=`background:${i<26?'var(--green)':'var(--bg3)'};opacity:${i<26?1:0.3};`;pd.appendChild(d);}
 
 // Latest articles
 const la=document.getElementById('latest-articles');
