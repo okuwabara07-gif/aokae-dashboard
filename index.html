@@ -19,7 +19,6 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 .btn{padding:0.4rem 1rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:0.75rem;font-family:inherit;transition:all .2s}
 .btn:hover,.btn.active{border-color:var(--purple);color:var(--purple);background:rgba(124,58,237,0.1)}
 .btn-check{background:var(--purple);color:white;border-color:var(--purple);font-weight:700}
-.btn-check:hover{background:#6d28d9}
 .search{padding:0.4rem 1rem;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:0.75rem;font-family:inherit;outline:none;width:200px}
 .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;padding:1.5rem 2rem;border-bottom:1px solid var(--border)}
 .sum-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem}
@@ -45,8 +44,12 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 .check-tag.ng{border-color:rgba(255,68,102,0.3);color:var(--red);background:rgba(255,68,102,0.05)}
 .check-tag.na{color:var(--text2)}
 .card-actions{display:flex;justify-content:space-between;margin-top:0.75rem;font-size:0.65rem}
-.card-actions a,.card-actions span{color:var(--purple);cursor:pointer;text-decoration:none}
-.card-actions span{color:var(--text2)}
+.card-actions a{color:var(--purple);text-decoration:none}
+.card-actions span{color:var(--text2);cursor:pointer}
+.token-input{width:100%;padding:0.5rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:0.75rem;font-family:'DM Mono',monospace;outline:none;margin-bottom:1rem}
+.token-input:focus{border-color:var(--purple)}
+.token-section{padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.token-label{font-size:0.7rem;color:var(--text2);margin-bottom:0.5rem}
 </style>
 </head>
 <body>
@@ -57,6 +60,10 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
     <div>最終確認: <span id="hd-time">-</span></div>
   </div>
 </header>
+<div class="token-section">
+  <div class="token-label">🔑 GitHub Token（入力してから確認ボタンを押してください）</div>
+  <input class="token-input" type="password" id="token-input" placeholder="ghp_..." />
+</div>
 <div class="controls">
   <button class="btn btn-check" onclick="checkAll()">🔍 全サイト確認</button>
   <button class="btn active" id="btn-all" onclick="filterSites('all')">すべて</button>
@@ -78,7 +85,6 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 </div>
 <div class="grid" id="grid"></div>
 <script>
-const TOKEN='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';
 const SITES=[
   {repo:'haircolor-lab',name:'ヘアカラーLab',cat:'ヘアケア'},
   {repo:'diet-now-jp',name:'ダイエットNow',cat:'ダイエット'},
@@ -112,23 +118,27 @@ const SITES=[
   {repo:'eyeshadow-lab-jp',name:'アイシャドウLab',cat:'アイメイク'},
   {repo:'colorpass-web',name:'COPA FORTUNE',cat:'占い'},
 ];
-let data={};
+let siteData={};
 let currentFilter='all';
 let currentSearch='';
 
+function getToken(){return document.getElementById('token-input').value.trim();}
+
 async function checkSite(site){
-  updateCard(site.repo,{status:'checking'});
+  const TOKEN=getToken();
+  if(!TOKEN){alert('GitHubトークンを入力してください');return;}
+  updateCard(site,'checking',{});
   const r={status:'ok',hasAffiliate:false,hasCopa:false,hasAdSense:false,hasSitemap:false};
   const h={'Authorization':'token '+TOKEN};
   try{
-    const paths=['app/blog/%5Bslug%5D/page.tsx','app/page.tsx','src/app/blog/%5Bslug%5D/page.tsx'];
+    const paths=['app/blog/%5Bslug%5D/page.tsx','app/page.tsx'];
     for(const p of paths){
       try{
         const res=await fetch(`https://api.github.com/repos/okuwabara07-gif/${site.repo}/contents/${p}`,{headers:h});
         if(res.ok){
           const d=await res.json();
           const c=atob(d.content.replace(/\n/g,''));
-          r.hasAffiliate=c.includes('LAVA')||c.includes('sponsored')||c.includes('ケラスターゼ')||c.includes('affiliate');
+          r.hasAffiliate=c.includes('LAVA')||c.includes('sponsored')||c.includes('ケラスターゼ');
           r.hasCopa=c.includes('colorpass-web.vercel.app')||c.includes('コパ');
           break;
         }
@@ -148,33 +158,31 @@ async function checkSite(site){
       r.hasSitemap=res.ok;
     }catch{}
   }catch{r.status='error';}
-  data[site.repo]=r;
-  updateCard(site.repo,r,site);
+  siteData[site.repo]=r;
+  updateCard(site,r.status,r);
   updateSummary();
-  return r;
 }
 
-function updateCard(repo,r,site){
-  const card=document.getElementById('c-'+repo);
+function updateCard(site,status,r){
+  const card=document.getElementById('c-'+site.repo);
   if(!card)return;
-  const s=SITES.find(x=>x.repo===repo)||site||{};
-  const icon=r.status==='ok'?'✅':r.status==='checking'?'🔄':r.status==='error'?'❌':'⚪';
-  const label=r.status==='ok'?'正常':r.status==='checking'?'確認中':r.status==='error'?'エラー':'未確認';
-  card.className=`site-card ${r.status||'unknown'}`;
+  card.className=`site-card ${status}`;
+  const icon=status==='ok'?'✅':status==='checking'?'🔄':status==='error'?'❌':'⚪';
+  const label=status==='ok'?'正常':status==='checking'?'確認中':status==='error'?'エラー':'未確認';
   card.innerHTML=`
     <div class="card-top">
-      <div><div class="card-name">${s.name||repo}</div><div class="card-url">${repo}</div></div>
-      <div class="status-badge ${r.status||'unknown'}">${icon} ${label}</div>
+      <div><div class="card-name">${site.name}</div><div class="card-url">${site.repo}</div></div>
+      <div class="status-badge ${status}">${icon} ${label}</div>
     </div>
     <div class="check-list">
-      <span class="check-tag ${r.hasSitemap?'ok':'ng'}">${r.hasSitemap?'✓':'✗'} sitemap</span>
-      <span class="check-tag ${r.hasAffiliate?'ok':'ng'}">${r.hasAffiliate?'✓':'✗'} アフィリ</span>
-      <span class="check-tag ${r.hasCopa?'ok':'ng'}">${r.hasCopa?'✓':'✗'} コパ</span>
-      <span class="check-tag ${r.hasAdSense?'ok':'ng'}">${r.hasAdSense?'✓':'✗'} AdSense</span>
+      <span class="check-tag ${r.hasSitemap?'ok':r.hasSitemap===false&&status==='ok'?'ng':'na'}">${r.hasSitemap?'✓':'✗'} sitemap</span>
+      <span class="check-tag ${r.hasAffiliate?'ok':r.hasAffiliate===false&&status==='ok'?'ng':'na'}">${r.hasAffiliate?'✓':'✗'} アフィリ</span>
+      <span class="check-tag ${r.hasCopa?'ok':r.hasCopa===false&&status==='ok'?'ng':'na'}">${r.hasCopa?'✓':'✗'} コパ</span>
+      <span class="check-tag ${r.hasAdSense?'ok':r.hasAdSense===false&&status==='ok'?'ng':'na'}">${r.hasAdSense?'✓':'✗'} AdSense</span>
     </div>
     <div class="card-actions">
-      <a href="https://${repo}.vercel.app" target="_blank">→ サイトを開く</a>
-      <span onclick="checkSite(${JSON.stringify(s)})">🔄 再確認</span>
+      <a href="https://${site.repo}.vercel.app" target="_blank">→ サイトを開く</a>
+      <span onclick='checkSite(${JSON.stringify(site)})'>🔄 再確認</span>
     </div>`;
 }
 
@@ -198,13 +206,15 @@ function renderAll(){
       </div>
       <div class="card-actions">
         <a href="https://${s.repo}.vercel.app" target="_blank">→ サイトを開く</a>
-        <span onclick="checkSite(${JSON.stringify(s)})">🔄 再確認</span>
+        <span onclick='checkSite(${JSON.stringify(s)})'>🔄 再確認</span>
       </div>`;
     g.appendChild(d);
   });
 }
 
 async function checkAll(){
+  const TOKEN=getToken();
+  if(!TOKEN){alert('GitHubトークンを入力してください');return;}
   const btn=document.querySelector('.btn-check');
   btn.textContent='確認中...';btn.disabled=true;
   let done=0;
@@ -213,7 +223,7 @@ async function checkAll(){
     done++;
     document.getElementById('progress-fill').style.width=(done/SITES.length*100)+'%';
     document.getElementById('progress-text').textContent=`${done}/${SITES.length}`;
-    await new Promise(r=>setTimeout(r,200));
+    await new Promise(r=>setTimeout(r,300));
   }
   btn.textContent='🔍 全サイト確認';btn.disabled=false;
   document.getElementById('hd-time').textContent=new Date().toLocaleTimeString('ja-JP');
@@ -221,7 +231,7 @@ async function checkAll(){
 }
 
 function updateSummary(){
-  const v=Object.values(data);
+  const v=Object.values(siteData);
   document.getElementById('s-ok').textContent=v.filter(x=>x.status==='ok').length;
   document.getElementById('s-err').textContent=v.filter(x=>x.status==='error').length;
   document.getElementById('s-aff').textContent=v.filter(x=>x.hasAffiliate).length;
@@ -247,7 +257,7 @@ function applyFilter(){
   SITES.forEach(s=>{
     const card=document.getElementById('c-'+s.repo);
     if(!card)return;
-    const d=data[s.repo]||{};
+    const d=siteData[s.repo]||{};
     const matchFilter=
       currentFilter==='all'||
       (currentFilter==='ok'&&d.status==='ok')||
@@ -260,6 +270,12 @@ function applyFilter(){
 }
 
 renderAll();
+// localStorageからトークン復元
+const saved=localStorage.getItem('gh_token');
+if(saved)document.getElementById('token-input').value=saved;
+document.getElementById('token-input').addEventListener('change',e=>{
+  localStorage.setItem('gh_token',e.target.value);
+});
 </script>
 </body>
 </html>
