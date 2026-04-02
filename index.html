@@ -131,32 +131,25 @@ async function checkSite(site){
   const r={status:'ok',hasAffiliate:false,hasCopa:false,hasAdSense:false,hasSitemap:false};
   const h={'Authorization':'token '+TOKEN};
   try{
-    const paths=['app/blog/%5Bslug%5D/page.tsx','app/page.tsx'];
-    for(const p of paths){
+    const treeRes=await fetch('https://api.github.com/repos/okuwabara07-gif/'+site.repo+'/git/trees/main?recursive=1',{headers:h});
+    if(!treeRes.ok){r.status='error';siteData[site.repo]=r;updateCard(site,'error',r);updateSummary();return;}
+    const tree=await treeRes.json();
+    const files=(tree.tree||[]).map(f=>f.path);
+    r.hasSitemap=files.some(f=>f.includes('sitemap.ts')||f.includes('sitemap.xml'));
+    const targets=files.filter(f=>(f.endsWith('page.tsx')||f.endsWith('layout.tsx'))&&!f.includes('node_modules')).slice(0,8);
+    for(const fp of targets){
       try{
-        const res=await fetch(`https://api.github.com/repos/okuwabara07-gif/${site.repo}/contents/${p}`,{headers:h});
-        if(res.ok){
-          const d=await res.json();
-          const c=atob(d.content.replace(/\n/g,''));
-          r.hasAffiliate=c.includes('LAVA')||c.includes('sponsored')||c.includes('ケラスターゼ');
-          r.hasCopa=c.includes('colorpass-web.vercel.app')||c.includes('コパ');
-          break;
-        }
+        const res=await fetch('https://api.github.com/repos/okuwabara07-gif/'+site.repo+'/contents/'+fp.replace('[','%5B').replace(']','%5D'),{headers:h});
+        if(!res.ok)continue;
+        const d=await res.json();
+        if(!d.content)continue;
+        const c=atob(d.content.replace(/
+/g,''));
+        if(c.includes('LAVA')||c.includes('ケラスターゼ')||c.includes('sponsored')||c.includes('forcise'))r.hasAffiliate=true;
+        if(c.includes('colorpass-web.vercel.app')||c.includes('copa')||c.includes('コパ'))r.hasCopa=true;
+        if(c.includes('ca-pub-3460729726810386'))r.hasAdSense=true;
       }catch{}
     }
-    try{
-      const res=await fetch(`https://api.github.com/repos/okuwabara07-gif/${site.repo}/contents/app/layout.tsx`,{headers:h});
-      if(res.ok){
-        const d=await res.json();
-        const c=atob(d.content.replace(/\n/g,''));
-        r.hasAdSense=c.includes('ca-pub-3460729726810386');
-        if(!r.hasCopa)r.hasCopa=c.includes('copa')||c.includes('コパ');
-      }
-    }catch{}
-    try{
-      const res=await fetch(`https://api.github.com/repos/okuwabara07-gif/${site.repo}/contents/app/sitemap.ts`,{headers:h});
-      r.hasSitemap=res.ok;
-    }catch{}
   }catch{r.status='error';}
   siteData[site.repo]=r;
   updateCard(site,r.status,r);
