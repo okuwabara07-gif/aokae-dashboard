@@ -143,7 +143,7 @@ async function checkSite(site){
         if(!res.ok)continue;
         const d=await res.json();
         if(!d.content)continue;
-        const c=atob(d.content.replace(/\n/g,''));
+        const c=atob(d.content.split('\n').join(''));
         if(c.includes('LAVA')||c.includes('ケラスターゼ')||c.includes('sponsored')||c.includes('forcise'))r.hasAffiliate=true;
         if(c.includes('colorpass-web.vercel.app')||c.includes('copa')||c.includes('コパ'))r.hasCopa=true;
         if(c.includes('ca-pub-3460729726810386'))r.hasAdSense=true;
