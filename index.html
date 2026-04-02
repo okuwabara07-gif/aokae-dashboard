@@ -32,7 +32,7 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 .site-card:hover{border-color:rgba(192,132,252,0.3);transform:translateY(-2px)}
 .site-card.ok{border-left:3px solid var(--green)}
 .site-card.error{border-left:3px solid var(--red)}
-.site-card.checking{border-left:3px solid var(--yellow)}
+.site-card.checking{border-left:3px solid var(--yellow)}.site-card.pending{opacity:0.6;border-left:3px solid #444}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem}
 .card-name{font-weight:700;font-size:0.9rem}
 .card-url{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text2);margin-top:2px}
@@ -76,7 +76,7 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 </div>
 <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 <div class="summary">
-  <div class="sum-card"><div class="sum-label">総サイト数</div><div class="sum-val purple" id="s-total">31</div></div>
+  <div class="sum-card"><div class="sum-label">総サイト数</div><div class="sum-val purple" id="s-total">51</div></div>
   <div class="sum-card"><div class="sum-label">正常稼働</div><div class="sum-val green" id="s-ok">-</div></div>
   <div class="sum-card"><div class="sum-label">エラー</div><div class="sum-val red" id="s-err">-</div></div>
   <div class="sum-card"><div class="sum-label">アフィリ設置</div><div class="sum-val yellow" id="s-aff">-</div></div>
@@ -86,57 +86,57 @@ header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;ju
 <div class="grid" id="grid"></div>
 <script>
 const SITES=[
-  {repo:'baby-note-jp',name:'ベビーノート',cat:'育児'},
-  {repo:'beauty-device-jp',name:'美容機器Lab',cat:'美容機器'},
-  {repo:'beauty-portal-jp',name:'ビューティーポータル',cat:'美容'},
-  {repo:'bike-note-jp',name:'バイクノート',cat:'バイク'},
-  {repo:'body-care-jp',name:'ボディケアLab',cat:'ボディ'},
-  {repo:'camera-lab-jp',name:'カメラLab',cat:'カメラ'},
-  {repo:'card-note-jp',name:'カードノート',cat:'クレカ'},
-  {repo:'career-note-jp',name:'キャリアノート',cat:'キャリア'},
-  {repo:'coffee-note-jp',name:'コーヒーノート',cat:'コーヒー'},
-  {repo:'colorpass-web',name:'COPA FORTUNE',cat:'占い'},
-  {repo:'cooking-note-jp',name:'料理ノート',cat:'料理'},
-  {repo:'diet-now',name:'ダイエットNow2',cat:'ダイエット'},
-  {repo:'diet-now-jp',name:'ダイエットNow',cat:'ダイエット'},
-  {repo:'english-lab-jp',name:'英語Lab',cat:'英語'},
-  {repo:'fashion-note-jp',name:'ファッションノート',cat:'ファッション'},
-  {repo:'fitness-lab-2026',name:'フィットネスLab2026',cat:'フィットネス'},
-  {repo:'fitness-lab-jp',name:'フィットネスLab',cat:'フィットネス'},
-  {repo:'freelance-note-jp',name:'フリーランスノート',cat:'副業'},
-  {repo:'fx-note-jp',name:'FXノート',cat:'FX'},
-  {repo:'gadget-lab-jp',name:'ガジェットLab',cat:'ガジェット'},
-  {repo:'golf-lab-jp',name:'ゴルフLab',cat:'ゴルフ'},
-  {repo:'hair-care-jp',name:'ヘアケアLab',cat:'ヘアケア'},
-  {repo:'haircolor-lab',name:'ヘアカラーLab',cat:'ヘアカラー'},
-  {repo:'health-note-jp',name:'健康ノート',cat:'健康'},
-  {repo:'insurance-note-jp',name:'保険ノート',cat:'保険'},
-  {repo:'interior-log-jp',name:'インテリアログ',cat:'インテリア'},
-  {repo:'job-change-jp',name:'転職ノート',cat:'転職'},
-  {repo:'kbeauty-brand-jp',name:'韓国コスメブランド',cat:'韓国コスメ'},
-  {repo:'kcos-review-jp',name:'韓国コスメレビュー',cat:'韓国コスメ'},
-  {repo:'kdrama-beauty-jp',name:'韓ドラ美容',cat:'韓国'},
-  {repo:'kmake-lab-jp',name:'韓国メイクLab',cat:'韓国メイク'},
-  {repo:'kskin-lab-jp',name:'韓国スキンLab',cat:'韓国スキン'},
-  {repo:'loan-note-jp',name:'ローンノート',cat:'ローン'},
-  {repo:'makeup-lab-jp',name:'メイクLab',cat:'メイク'},
-  {repo:'money-note-jp',name:'マネーノート',cat:'マネー'},
-  {repo:'nail-lab-jp',name:'ネイルLab',cat:'ネイル'},
-  {repo:'nisa-note-jp',name:'NISAノート',cat:'NISA'},
-  {repo:'outdoor-note-jp',name:'アウトドアノート',cat:'アウトドア'},
-  {repo:'pet-love-jp',name:'ペットラブ',cat:'ペット'},
-  {repo:'remote-work-jp',name:'リモートワーク',cat:'リモート'},
-  {repo:'running-note-jp',name:'ランニングノート',cat:'ランニング'},
-  {repo:'sauna-log-jp',name:'サウナログ',cat:'サウナ'},
-  {repo:'side-job-jp',name:'副業ノート',cat:'副業'},
-  {repo:'skill-up-jp',name:'スキルアップ',cat:'スキル'},
-  {repo:'skincare-note-jp',name:'スキンケアノート',cat:'スキンケア'},
-  {repo:'startup-note-jp',name:'スタートアップ',cat:'起業'},
-  {repo:'supplement-jp',name:'サプリLab',cat:'サプリ'},
-  {repo:'swim-note-jp',name:'スイムノート',cat:'水泳'},
-  {repo:'travel-log-jp',name:'トラベルログ',cat:'旅行'},
-  {repo:'yoga-lab-jp',name:'ヨガLab',cat:'ヨガ'},
-  {repo:'yoga-note-jp',name:'ヨガノート',cat:'ヨガ'},
+  {repo:'baby-note-jp',name:'ベビーノート',cat:'育児',deployed:true},
+  {repo:'beauty-device-jp',name:'美容機器Lab',cat:'美容機器',deployed:false},
+  {repo:'beauty-portal-jp',name:'ビューティーポータル',cat:'美容',deployed:true},
+  {repo:'bike-note-jp',name:'バイクノート',cat:'バイク',deployed:false},
+  {repo:'body-care-jp',name:'ボディケアLab',cat:'ボディ',deployed:false},
+  {repo:'camera-lab-jp',name:'カメラLab',cat:'カメラ',deployed:true},
+  {repo:'card-note-jp',name:'カードノート',cat:'クレカ',deployed:false},
+  {repo:'career-note-jp',name:'キャリアノート',cat:'キャリア',deployed:true},
+  {repo:'coffee-note-jp',name:'コーヒーノート',cat:'コーヒー',deployed:true},
+  {repo:'colorpass-web',name:'COPA FORTUNE',cat:'占い',deployed:true},
+  {repo:'cooking-note-jp',name:'料理ノート',cat:'料理',deployed:true},
+  {repo:'diet-now',name:'ダイエットNow2',cat:'ダイエット',deployed:false},
+  {repo:'diet-now-jp',name:'ダイエットNow',cat:'ダイエット',deployed:true},
+  {repo:'english-lab-jp',name:'英語Lab',cat:'英語',deployed:true},
+  {repo:'fashion-note-jp',name:'ファッションノート',cat:'ファッション',deployed:true},
+  {repo:'fitness-lab-2026',name:'フィットネスLab2026',cat:'フィットネス',deployed:true},
+  {repo:'fitness-lab-jp',name:'フィットネスLab',cat:'フィットネス',deployed:true},
+  {repo:'freelance-note-jp',name:'フリーランスノート',cat:'副業',deployed:false},
+  {repo:'fx-note-jp',name:'FXノート',cat:'FX',deployed:false},
+  {repo:'gadget-lab-jp',name:'ガジェットLab',cat:'ガジェット',deployed:true},
+  {repo:'golf-lab-jp',name:'ゴルフLab',cat:'ゴルフ',deployed:true},
+  {repo:'hair-care-jp',name:'ヘアケアLab',cat:'ヘアケア',deployed:false},
+  {repo:'haircolor-lab',name:'ヘアカラーLab',cat:'ヘアカラー',deployed:true},
+  {repo:'health-note-jp',name:'健康ノート',cat:'健康',deployed:false},
+  {repo:'insurance-note-jp',name:'保険ノート',cat:'保険',deployed:false},
+  {repo:'interior-log-jp',name:'インテリアログ',cat:'インテリア',deployed:true},
+  {repo:'job-change-jp',name:'転職ノート',cat:'転職',deployed:false},
+  {repo:'kbeauty-brand-jp',name:'韓国コスメブランド',cat:'韓国コスメ',deployed:true},
+  {repo:'kcos-review-jp',name:'韓国コスメレビュー',cat:'韓国コスメ',deployed:true},
+  {repo:'kdrama-beauty-jp',name:'韓ドラ美容',cat:'韓国',deployed:true},
+  {repo:'kmake-lab-jp',name:'韓国メイクLab',cat:'韓国メイク',deployed:true},
+  {repo:'kskin-lab-jp',name:'韓国スキンLab',cat:'韓国スキン',deployed:true},
+  {repo:'loan-note-jp',name:'ローンノート',cat:'ローン',deployed:false},
+  {repo:'makeup-lab-jp',name:'メイクLab',cat:'メイク',deployed:true},
+  {repo:'money-note-jp',name:'マネーノート',cat:'マネー',deployed:false},
+  {repo:'nail-lab-jp',name:'ネイルLab',cat:'ネイル',deployed:true},
+  {repo:'nisa-note-jp',name:'NISAノート',cat:'NISA',deployed:false},
+  {repo:'outdoor-note-jp',name:'アウトドアノート',cat:'アウトドア',deployed:false},
+  {repo:'pet-love-jp',name:'ペットラブ',cat:'ペット',deployed:true},
+  {repo:'remote-work-jp',name:'リモートワーク',cat:'リモート',deployed:false},
+  {repo:'running-note-jp',name:'ランニングノート',cat:'ランニング',deployed:false},
+  {repo:'sauna-log-jp',name:'サウナログ',cat:'サウナ',deployed:true},
+  {repo:'side-job-jp',name:'副業ノート',cat:'副業',deployed:true},
+  {repo:'skill-up-jp',name:'スキルアップ',cat:'スキル',deployed:false},
+  {repo:'skincare-note-jp',name:'スキンケアノート',cat:'スキンケア',deployed:true},
+  {repo:'startup-note-jp',name:'スタートアップ',cat:'起業',deployed:false},
+  {repo:'supplement-jp',name:'サプリLab',cat:'サプリ',deployed:false},
+  {repo:'swim-note-jp',name:'スイムノート',cat:'水泳',deployed:false},
+  {repo:'travel-log-jp',name:'トラベルログ',cat:'旅行',deployed:true},
+  {repo:'yoga-lab-jp',name:'ヨガLab',cat:'ヨガ',deployed:false},
+  {repo:'yoga-note-jp',name:'ヨガノート',cat:'ヨガ',deployed:true},
 ];
 let siteData={};
 let currentFilter='all';
@@ -178,7 +178,7 @@ async function checkSite(site){
 function updateCard(site,status,r){
   const card=document.getElementById('c-'+site.repo);
   if(!card)return;
-  card.className=`site-card ${status}`;
+  card.className=`site-card ${status}${!site.deployed?' pending':''}`;
   const icon=status==='ok'?'✅':status==='checking'?'🔄':status==='error'?'❌':'⚪';
   const label=status==='ok'?'正常':status==='checking'?'確認中':status==='error'?'エラー':'未確認';
   card.innerHTML=`
