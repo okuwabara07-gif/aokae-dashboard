@@ -1,0 +1,52 @@
+name: LINE Daily Report
+
+on:
+  schedule:
+    - cron: '0 22 * * *'  # 07:00 JST (morning)
+    - cron: '0 10 * * *'  # 19:00 JST (evening)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Report mode'
+        type: choice
+        options: [morning, evening]
+        default: morning
+
+concurrency:
+  group: line-report-${{ github.event.schedule || github.event.inputs.mode }}
+  cancel-in-progress: false
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: .github/scripts/line-report
+    env:
+      TZ: Asia/Tokyo
+      MODE: >-
+        ${{
+          github.event.schedule == '0 22 * * *' && 'morning' ||
+          github.event.schedule == '0 10 * * *' && 'evening' ||
+          github.event.inputs.mode
+        }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+      LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: .github/scripts/line-report/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send report
+        run: npm start
