@@ -19,12 +19,9 @@ function aggregateProducts(data: RawData, soccer: SoccerKpis): ProductKpis {
   }
 
   const af = data.affiliateSites
-  const isActive = (s: { is_active?: boolean; status?: string }) =>
-    s.is_active === true || s.status === 'active'
-  const hasArticles = (s: { article_count?: number }) => (s.article_count ?? 0) > 0
   const affiliate = {
-    active: af.filter(isActive).length,
-    withArticles: af.filter(hasArticles).length,
+    active: af.filter(s => s.is_active === true).length,
+    withArticles: af.filter(s => s.has_articles === true || (s.article_count ?? 0) > 0).length,
     total: af.length,
   }
 

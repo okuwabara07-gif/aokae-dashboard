@@ -55,17 +55,13 @@ export async function fetchAll(
 export async function fetchSoccer(url: string, anonKey: string): Promise<SoccerKpis> {
   try {
     const client = createClient(url, anonKey, { auth: { persistSession: false } })
-    const [teamsRes, premiumRes] = await Promise.all([
-      client.from('teams').select('id', { count: 'exact', head: true }),
-      client
-        .from('users')
-        .select('id', { count: 'exact', head: true })
-        .eq('plan', 'premium'),
-    ])
+    const teamsRes = await client
+      .from('teams')
+      .select('id', { count: 'exact', head: true })
     return {
       teams: teamsRes.error ? null : teamsRes.count ?? 0,
-      premiumMembers: premiumRes.error ? null : premiumRes.count ?? 0,
-      error: teamsRes.error?.message ?? premiumRes.error?.message,
+      premiumMembers: null,
+      error: teamsRes.error?.message,
     }
   } catch (e) {
     return {

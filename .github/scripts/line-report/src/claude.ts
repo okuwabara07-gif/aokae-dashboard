@@ -20,7 +20,7 @@ function summarize(kpis: Kpis): string {
     `- 手残り: ${fmtYen(kpis.profit)}`,
     `- 新規リード: ${kpis.leadsNew}件 / 要対応アラート: ${kpis.unreadCriticalAlerts}件`,
     `- SalonRink: 登録店舗${p.salonrink.stores} / 新規リード${p.salonrink.newLeads}`,
-    `- soccer-tokyo: チーム${p.soccer.teams ?? '?'} / プレミアム${p.soccer.premiumMembers ?? '?'}`,
+    `- soccer-kanto: チーム${p.soccer.teams ?? '?'}件`,
     `- アフィリエイト: 稼働${p.affiliate.active}/全${p.affiliate.total}, 記事あり${p.affiliate.withArticles}`,
     `- インフラ: Vercel ${kpis.infra.vercelDown}件DOWN / ${kpis.infra.vercelTotal}件, GH Actions 直近失敗${kpis.infra.actionsFailure}件`,
   ].join('\n')

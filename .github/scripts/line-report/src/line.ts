@@ -36,17 +36,17 @@ function summaryBlock(kpis: Kpis): string[] {
 function productBlock(kpis: Kpis): string[] {
   const p = kpis.products
   const soccerTeams = p.soccer.teams ?? '—'
-  const soccerPremium = p.soccer.premiumMembers ?? '—'
+  const soccerLine = p.soccer.error
+    ? `  └ 取得失敗: ${p.soccer.error.slice(0, 40)}`
+    : `  └ チーム ${soccerTeams}件`
   return [
     '🧩 プロダクト別',
     `💅 SalonRink`,
     `  └ 登録店舗 ${p.salonrink.stores}件 / 新規リード ${p.salonrink.newLeads}件`,
     `🎨 COLORPASS`,
     `  └ 準備中`,
-    `⚽ soccer-tokyo`,
-    p.soccer.error
-      ? `  └ 取得失敗: ${p.soccer.error.slice(0, 40)}`
-      : `  └ チーム ${soccerTeams} / プレミアム会員 ${soccerPremium}`,
+    `⚽ soccer-kanto`,
+    soccerLine,
     `🔗 アフィリエイト`,
     `  └ 稼働 ${p.affiliate.active}/${p.affiliate.total}件 / 記事あり ${p.affiliate.withArticles}件`,
   ]

@@ -40,9 +40,11 @@ export type Alert = {
 export type AffiliateSite = {
   id?: string
   site_name?: string
-  status?: string
   is_active?: boolean
+  has_articles?: boolean
   article_count?: number
+  monthly_pv?: number
+  monthly_revenue?: number
 }
 
 export type RawData = {
