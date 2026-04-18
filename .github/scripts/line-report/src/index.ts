@@ -1,8 +1,9 @@
-import { createSupabaseClient, fetchAll } from './supabase.js'
+import { createSupabaseClient, fetchAll, fetchSoccer } from './supabase.js'
 import { aggregate } from './aggregate.js'
-import { generateComment } from './claude.js'
+import { generateComment, generateTodayTasks } from './claude.js'
 import { pushReport, pushFailureNotice } from './line.js'
-import type { Mode } from './types.js'
+import { fetchRecentRuns } from './github.js'
+import type { Mode, SoccerKpis, GithubRun } from './types.js'
 
 function requireEnv(name: string): string {
   const v = process.env[name]
@@ -15,6 +16,28 @@ function parseMode(raw: string | undefined): Mode {
   throw new Error(`Invalid MODE: ${raw}. Expected 'morning' or 'evening'.`)
 }
 
+async function loadSoccer(): Promise<SoccerKpis> {
+  const url = process.env.SUPABASE_SOCCER_URL
+  const key = process.env.SUPABASE_SOCCER_ANON_KEY
+  if (!url || !key) {
+    return { teams: null, premiumMembers: null, error: 'env未設定' }
+  }
+  return fetchSoccer(url, key)
+}
+
+async function loadRuns(): Promise<{ runs: GithubRun[]; error?: string }> {
+  const token = process.env.GITHUB_TOKEN
+  const repo = process.env.GITHUB_REPOSITORY
+  if (!token || !repo) {
+    return { runs: [], error: 'GITHUB_TOKEN/REPOSITORY未設定' }
+  }
+  try {
+    return { runs: await fetchRecentRuns(repo, token, 20) }
+  } catch (e) {
+    return { runs: [], error: e instanceof Error ? e.message : String(e) }
+  }
+}
+
 async function main() {
   const mode = parseMode(process.env.MODE)
   const supabaseUrl = requireEnv('SUPABASE_URL')
@@ -24,10 +47,21 @@ async function main() {
   const lineUserId = requireEnv('LINE_USER_ID')
 
   const supabase = createSupabaseClient(supabaseUrl, supabaseKey)
-  const raw = await fetchAll(supabase)
-  const kpis = aggregate(raw)
-  const comment = await generateComment(anthropicKey, kpis)
-  await pushReport({ token: lineToken, userId: lineUserId }, mode, kpis, comment)
+
+  const [raw, soccer, runsResult] = await Promise.all([
+    fetchAll(supabase),
+    loadSoccer(),
+    loadRuns(),
+  ])
+
+  const kpis = aggregate(raw, soccer, runsResult.runs, runsResult.error)
+
+  const [comment, tasks] = await Promise.all([
+    generateComment(anthropicKey, kpis),
+    generateTodayTasks(anthropicKey, kpis, mode),
+  ])
+
+  await pushReport({ token: lineToken, userId: lineUserId }, mode, kpis, comment, tasks)
 
   console.log(`[${mode}] report sent successfully.`)
 }

@@ -37,12 +37,75 @@ export type Alert = {
   created_at: string
 }
 
+export type AffiliateSite = {
+  id?: string
+  site_name?: string
+  status?: string
+  is_active?: boolean
+  article_count?: number
+}
+
 export type RawData = {
   revenues: Revenue[]
   costs: Cost[]
   sites: SiteHealth[]
   leads: Lead[]
   alerts: Alert[]
+  affiliateSites: AffiliateSite[]
+}
+
+export type SalonRinkKpis = {
+  stores: number
+  newLeads: number
+}
+
+export type ColorPassKpis = {
+  status: 'wip' | 'ready'
+}
+
+export type SoccerKpis = {
+  teams: number | null
+  premiumMembers: number | null
+  error?: string
+}
+
+export type AffiliateKpis = {
+  active: number
+  withArticles: number
+  total: number
+}
+
+export type ProductKpis = {
+  salonrink: SalonRinkKpis
+  colorpass: ColorPassKpis
+  soccer: SoccerKpis
+  affiliate: AffiliateKpis
+}
+
+export type GithubRun = {
+  name: string
+  conclusion: string | null
+  status: string
+  updatedAt: string
+}
+
+export type InfraKpis = {
+  vercelTotal: number
+  vercelDown: number
+  actionsSuccess: number
+  actionsFailure: number
+  actionsRecent: GithubRun[]
+  actionsError?: string
+}
+
+export type AgentActivity = {
+  name: string
+  status: string
+  lastRun: string
+}
+
+export type TeamKpis = {
+  agents: AgentActivity[]
 }
 
 export type Kpis = {
@@ -56,6 +119,9 @@ export type Kpis = {
   leadsNew: number
   unreadCriticalAlerts: number
   currentMonth: string
+  products: ProductKpis
+  infra: InfraKpis
+  team: TeamKpis
 }
 
 export type Mode = 'morning' | 'evening'
